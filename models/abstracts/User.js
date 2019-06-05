@@ -13,7 +13,7 @@ class User extends Sequelize.Model {
         expirationDate.setDate(today.getDate() + 60);
 
         return jwt.sign({
-            id: this[this.idKey],
+            id: this.id,
             type: this.getUserType(),
             login: this.login,
             exp: parseInt(expirationDate.getTime() / 1000, 10),
@@ -22,7 +22,7 @@ class User extends Sequelize.Model {
 
     toAuthJSON() {
         return {
-            id: this[this.idKey],
+            id: this.id,
             type: this.getUserType(),
             login: this.login,
             token: this.generateJWT(),
@@ -33,30 +33,6 @@ class User extends Sequelize.Model {
         return 'User';
     }
 
-    static getUserIdKey() {
-        return 'idUser';
-    }
-
 }
-
-User.dataTypes = {
-    login: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    password: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    firstName: {
-        type: Sequelize.STRING
-    },
-    middleName: {
-        type: Sequelize.STRING
-    },
-    lastName: {
-        type: Sequelize.STRING
-    }
-};
 
 module.exports = User;

@@ -1,45 +1,37 @@
-
-const User = require('./User');
-const sequelize = require('../config/sequelize');
+const User = require('./abstracts/User');
 const Sequelize = require('sequelize');
 
-class Student extends User {
-    constructor(...args) {
-        super(...args);
-        this.idKey = 'idStudent';
+module.exports = (sequelize, DataTypes) => {
+    class Student extends User {
+        getUserType() {
+            return 'Student';
+        }
+
+        static associate(Student, models) {
+            Student.belongsTo(models.Group, {
+                foreignKey: {
+                    allowNull: false,
+                    name: 'groupId'
+                },
+                onDelete: 'CASCADE'
+            });
+        };
     }
 
-    getUserType() {
-        return 'Student';
-    }
+    Student.init({
+        login: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        password: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        name: {
+            type: Sequelize.STRING,
+            allowNull: false
+        }
+    }, {sequelize, timestamps: false });
 
-    static getUserIdKey() {
-        return 'idStudent';
-    }
-}
-
-Student.dataTypes = Object.assign({}, User.dataTypes, {
-    idStudent: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        primaryKey: true
-    },
-    idGroup: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        primaryKey: true
-    },
-    credited: {
-        type: Sequelize.STRING
-    }
-});
-
-Student.options = {
-    sequelize,
-    timestamps: false,
-    modelName: 'Student'
+    return Student;
 };
-
-Student.init(Student.dataTypes, Student.options);
-
-module.exports = Student;

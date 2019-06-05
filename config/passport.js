@@ -1,13 +1,12 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const models = require('../models');
 
-const userModels = {
-    Student: require('../models/Student'),
-    Teacher: require('../models/Teacher')
-};
 
-for (const [userType, userModel] of Object.entries(userModels)) {
-
+for (const [userType, userModel] of Object.entries({
+    Student: models.Student,
+    Teacher: models.Teacher
+})) {
     passport.use(userType, new LocalStrategy({
         usernameField: 'login',
         passwordField: 'password',
@@ -21,5 +20,4 @@ for (const [userType, userModel] of Object.entries(userModels)) {
                 return done(null, user);
             }).catch(done);
     }));
-
 }

@@ -1,36 +1,26 @@
-const User = require('./User');
-const sequelize = require('../config/sequelize');
+const User = require('./abstracts/User');
 const Sequelize = require('sequelize');
 
-class Teacher extends User {
-    constructor(...args) {
-        super(...args);
-        this.idKey = 'idTeacher';
+module.exports = (sequelize, DataTypes) => {
+    class Teacher extends User {
+        getUserType() {
+            return 'Teacher';
+        }
     }
 
-    getUserType() {
-        return 'Teacher';
-    }
+    Teacher.init({
+        login: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        password: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        name: {
+            type: Sequelize.STRING
+        }
+    }, {sequelize, timestamps: false });
 
-    static getUserIdKey() {
-        return 'idTeacher';
-    }
-}
-
-Teacher.dataTypes = Object.assign({}, User.dataTypes, {
-    idTeacher: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        primaryKey: true
-    }
-});
-
-Teacher.options = {
-    sequelize,
-    timestamps: false,
-    modelName: 'Teacher'
+    return Teacher;
 };
-
-Teacher.init(Teacher.dataTypes, Teacher.options);
-
-module.exports = Teacher;
