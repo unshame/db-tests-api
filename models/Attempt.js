@@ -3,7 +3,7 @@ const models = require('./index');
 
 module.exports = (sequelize, DataTypes) => {
     class Attempt extends Sequelize.Model {
-        static associate(Attempt, models) {
+        static associate(models) {
             Attempt.belongsTo(models.Student, {
                 foreignKey: {
                     allowNull: false,

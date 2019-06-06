@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     class Group extends Sequelize.Model {
-        static associate(Group, models) {
+        static associate(models) {
             Group.hasMany(models.Student, {
                 foreignKey: {
                     allowNull: false,

@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     class Answer extends Sequelize.Model {
-        static associate(Answer, models) {
+        static associate(models) {
             Answer.belongsTo(models.Attempt, {
                 foreignKey: {
                     allowNull: false,

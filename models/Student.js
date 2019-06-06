@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
             return 'Student';
         }
 
-        static associate(Student, models) {
+        static associate(models) {
             Student.belongsTo(models.Group, {
                 foreignKey: {
                     allowNull: false,

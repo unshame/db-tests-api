@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     class Test extends Sequelize.Model {
-        static associate(Test, models) {
+        static associate(models) {
             Test.hasMany(models.Task, {
                 foreignKey: {
                     allowNull: false,
