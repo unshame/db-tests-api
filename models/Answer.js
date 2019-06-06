@@ -1,29 +1,37 @@
 const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class Task extends Sequelize.Model {
-        static associate(Task, models) {
-            Task.belongsTo(models.Test, {
+    class Answer extends Sequelize.Model {
+        static associate(Answer, models) {
+            Answer.belongsTo(models.Attempt, {
+                foreignKey: {
+                    allowNull: false,
+                    name: 'attemptId'
+                },
+                onDelete: 'CASCADE'
+            });
+
+            Answer.belongsTo(models.Test, {
                 foreignKey: {
                     allowNull: false,
                     name: 'testId'
-                },
-                onDelete: 'CASCADE'
+                }
             });
 
-            Task.hasMany(models.Answer, {
+            Answer.belongsTo(models.Task, {
                 foreignKey: {
                     allowNull: false,
                     name: 'taskId'
-                },
-                as: 'answers',
-                onDelete: 'CASCADE'
+                }
+            });
+
+            Answer.belongsTo(models.Student, {
+                foreignKey: {
+                    allowNull: false,
+                    name: 'studentId'
+                }
             });
         };
-
-        getParsedResult() {
-            return JSON.parse(this.result);
-        }
 
         getFormattedResult() {
             return JSON.stringify(JSON.parse(this.result), null, 4);
@@ -31,24 +39,13 @@ module.exports = (sequelize, DataTypes) => {
 
         toJSON() {
             return {
-                ...super.toJSON(), 
+                ...super.toJSON(),
                 formattedResult: this.getFormattedResult()
-            };
-        }
-
-        toPublicJSON() {
-            return {
-                id: this.id,
-                title: this.title
             };
         }
     }
 
-    Task.init({
-        title: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
+    Answer.init({
         query: {
             type: Sequelize.STRING,
             allowNull: false
@@ -56,8 +53,12 @@ module.exports = (sequelize, DataTypes) => {
         result: {
             type: Sequelize.TEXT,
             allowNull: false
+        },
+        correct: {
+            type: Sequelize.BOOLEAN,
+            allowNull: false
         }
     }, { sequelize, timestamps: false });
 
-    return Task;
+    return Answer;
 };

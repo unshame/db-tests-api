@@ -1,4 +1,5 @@
 const models = require('./models');
+const runTest = require('./runTest');
 
 (async () => {
     let group = await models.Group.create({
@@ -22,15 +23,25 @@ const models = require('./models');
         password: '1234'
     });
 
+    const databaseName = "Quizzer";
+
+    let test = await models.Test.create({
+        "title": "Quizzer",
+        "databaseName": databaseName
+    });
+
+    const query = 'SELECT * FROM Students';
+
+    let task = await models.Task.create({
+        testId: test.id,
+        title: 'task 1',
+        query: query,
+        result: JSON.stringify(await runTest(databaseName, query)),
+        isFinal: true
+    });
+
     console.log(await models.Group.findAll());
     console.log(await models.Student.findAll());
     console.log(await models.Teacher.findAll());
 
-    require('./runTest')('Quizzer', `UPDATE Students SET login = "asdasd" WHERE login = "unshame"`)
-        .catch(err => {
-            console.log(err);
-        })
-        .then(results => {
-            console.log(results);
-        });
 })();

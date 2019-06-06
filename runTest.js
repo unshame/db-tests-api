@@ -4,6 +4,13 @@ const env = process.env;
 const connections = new Map();
 
 async function runTest(databaseName, query) {
+
+    if (typeof query !== 'string') {
+        const error = new Error(`No query provided`);
+        error.status = 400;
+        throw error;
+    }
+
     const connection = getConnection(databaseName);
     
     let transaction;

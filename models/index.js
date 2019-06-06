@@ -3,7 +3,7 @@ var path = require('path');
 var Sequelize = require('sequelize');
 var sequelize = require('../sequelize');
 var basename = path.basename(__filename);
-var db = {};
+var db = module.exports = {};
 
 fs.readdirSync(__dirname)
     .filter(file => {
@@ -22,6 +22,3 @@ Object.keys(db).forEach(modelName => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-
-module.exports = db;
-

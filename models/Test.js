@@ -11,7 +11,30 @@ module.exports = (sequelize, DataTypes) => {
                 as: 'tasks',
                 onDelete: 'CASCADE'
             });
+
+            Test.hasMany(models.Attempt, {
+                foreignKey: {
+                    allowNull: false,
+                    name: 'testId'
+                },
+                as: 'attempts',
+                onDelete: 'CASCADE'
+            });
+
+            Test.hasMany(models.Answer, {
+                foreignKey: {
+                    allowNull: false,
+                    name: 'testId'
+                },
+                as: 'answers'
+            });
         };
+
+        toPublicJSON() {
+            const value = this.toJSON();
+            delete value.databaseName;
+            return value;
+        }
     }
 
     Test.init({

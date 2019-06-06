@@ -101,20 +101,20 @@ router.post('/:testId/task', auth.teacher, async (req, res, next) => {
         return res.sendStatus(404);
     }
 
-    let results;
+    let resultObject;
 
     try {
-        results = await runTest(test.databaseName, query);
+        resultObject = await runTest(test.databaseName, query);
     } catch (err) {
         return next(err);
     }
 
-    const answer = JSON.stringify(results);
+    const result = JSON.stringify(resultObject);
 
     if (!isFinal) {
         return res.status(200).json({
-            answer: answer,
-            formattedAnswer: JSON.stringify(results, null, 4)
+            result,
+            formattedResult: JSON.stringify(resultObject, null, 4)
         });
     }
 
@@ -122,7 +122,7 @@ router.post('/:testId/task', auth.teacher, async (req, res, next) => {
 
     try {
         task = await models.Task.create({
-            title, answer, testId
+            title, query, result, testId
         });
     } catch (err) {
         err.status = 400;

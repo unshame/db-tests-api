@@ -15,6 +15,23 @@ module.exports = (sequelize, DataTypes) => {
                 },
                 onDelete: 'CASCADE'
             });
+
+            Student.hasMany(models.Attempt, {
+                foreignKey: {
+                    allowNull: false,
+                    name: 'studentId'
+                },
+                as: 'attempts',
+                onDelete: 'CASCADE'
+            });
+
+            Student.hasMany(models.Answer, {
+                foreignKey: {
+                    allowNull: false,
+                    name: 'studentId'
+                },
+                as: 'answers'
+            });
         };
     }
 
